@@ -6,6 +6,7 @@ import { ArtistsModule } from './artists/artists.module';
 import { TrackModule } from './track/track.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     UsersModule,
     ArtistsModule,
     TrackModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

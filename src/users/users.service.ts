@@ -20,6 +20,12 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
+  async getUserByLogin(login: string): Promise<UserEntity> {
+    return await this.usersRepository.findOne({
+      where: { login },
+    });
+  }
+
   async getOneUser(id: string): Promise<UserEntity> {
     return await this.usersRepository.findOne({
       where: { id },

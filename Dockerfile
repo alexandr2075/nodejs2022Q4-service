@@ -1,7 +1,13 @@
-FROM node:18.12-alpine
-WORKDIR /usr/app
+FROM node:18-alpine
+
+WORKDIR /app
+
 COPY package*.json ./
-RUN npm install -g npm@9.5.0
+
+RUN npm install --force
+
 COPY . .
-EXPOSE 4000
-CMD ["npm", "start:dev", "--legacy-peer-deps"]
+
+COPY ./dist ./dist
+
+CMD ["npm", "run", "start:dev"]

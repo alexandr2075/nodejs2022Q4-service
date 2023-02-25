@@ -6,21 +6,21 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { ArtistDto } from './dto/artist.dto';
 import { ArtistsService } from './artists.service';
 import { ArtistEntity } from './entities/artist.entity';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@ApiTags('artists')
-@Controller('artists')
+@ApiTags('artist')
+@UseGuards(JwtAuthGuard)
+@Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
-  @Get()
-  @ApiResponse({
-    type: [ArtistDto],
-  })
+
   @Post()
   create(@Body() createArtistDto: ArtistDto) {
     return this.artistsService.createArtist(createArtistDto);

@@ -1,10 +1,9 @@
-import { IsUUID } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '../../users/entities/user.entity';
 
-@Entity('artist')
+@Entity()
 export class ArtistEntity {
-  @IsUUID()
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -13,6 +12,6 @@ export class ArtistEntity {
   @Column()
   grammy: boolean;
 
-  @Column()
-  user_id: number;
+  @ManyToOne(() => UserEntity, (user) => user.artists)
+  user: UserEntity;
 }

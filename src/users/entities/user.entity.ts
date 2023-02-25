@@ -2,16 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Generated,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   VersionColumn,
 } from 'typeorm';
+import { ArtistEntity } from '../../artists/entities/artist.entity';
 
 @Entity()
 export class UserEntity {
-  @Generated()
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -28,4 +28,7 @@ export class UserEntity {
 
   @UpdateDateColumn()
   updatedAt: number;
+
+  @OneToMany(() => ArtistEntity, (artist) => artist.user)
+  artists: ArtistEntity[];
 }

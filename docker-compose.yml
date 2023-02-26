@@ -15,7 +15,7 @@ services:
     command: npm run start:dev
     depends_on:
       - postgres
-    restart: always
+    restart: on-failure
 
   postgres:
     container_name: postgres
@@ -28,7 +28,7 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
-    restart: always
+    restart: on-failure
     command: ["postgres", "-c", "logging_collector=on", "-c", "log_directory=./db_logs", "-c", "log_filename=postgresql.log", "-c", "log_statement=all"]
 
 volumes:

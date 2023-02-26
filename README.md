@@ -17,7 +17,7 @@ git clone {repository URL}
 npm install
 ```
 
-## Running application
+## Running application and database in docker
 
 ```
 npm start

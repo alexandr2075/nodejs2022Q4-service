@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { RolesModule } from './roles/roles.module';
     TrackModule,
     AuthModule,
     RolesModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

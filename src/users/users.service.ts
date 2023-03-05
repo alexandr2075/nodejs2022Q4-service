@@ -1,30 +1,56 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersStore } from './interfaces/user-storage.interface';
-import InMemoryUserStore from './store/in-memory.users.storage';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { MyLogger } from '../logger/MyLogger';
 
 @Injectable()
 export class UsersService {
-  constructor(private storage: InMemoryUserStore) {}
-
-  create(createUserDto: CreateUserDto) {
-    return this.storage.create(createUserDto);
+  constructor(
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
+    private myLogger: MyLogger,
+  ) {
+    this.myLogger.setContext('UsersService');
   }
 
-  findAll() {
-    return this.storage.getUsers();
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+    return await this.usersRepository.save({ ...createUserDto });
   }
 
-  findOne(id: string) {
-    return this.storage.findById(id);
+  async getAllUsers(req, res): Promise<UserEntity[]> {
+    await this.myLogger.customLog({
+      reqParam: [req.url, req.queries, req.body],
+      status: res.statusCode,
+    });
+    return await this.usersRepository.find();
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return this.storage.update(id, updateUserDto);
+  async getUserByLogin(login: string): Promise<UserEntity> {
+    return await this.usersRepository.findOne({
+      where: { login },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async getOneUser(id: string): Promise<UserEntity> {
+    return await this.usersRepository.findOne({
+      where: { id },
+    });
+  }
+
+  async updateUser(updateUserDto: UpdateUserDto): Promise<UserEntity> {
+    const user = await this.getOneUser(updateUserDto.id);
+    if ((user.password = updateUserDto.oldPassword)) {
+      return this.usersRepository.save({
+        ...user,
+        password: updateUserDto.newPassword,
+      });
+    }
+  }
+
+  async remove(id: string) {
+    await this.usersRepository.delete(id);
   }
 }
